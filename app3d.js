@@ -8,7 +8,7 @@ scene.background = new THREE.Color(0x222222); // Dark studio background
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(0, 1.5, 4);
 // Renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
@@ -51,10 +51,12 @@ function createMug() {
     // However, for a mug, the texture usually only goes on the outside.
     // We will use 2 materials: [0] = Side (Texture), [1] = Top (White), [2] = Bottom (White)
     // CylinderGeometry materials index: 0: radial side, 1: top, 2: bottom
-    const matSide = new THREE.MeshStandardMaterial({
+    const matSide = new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
-        roughness: 0.2,
-        metalness: 0.1, // Ceramic
+        roughness: 0.15,
+        metalness: 0.05,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
         map: placeholderTexture
     });
     const matCap = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 });
@@ -82,7 +84,7 @@ function createBottle() {
     const bodyHeight = 1.2;
     const bodyRadius = 0.35;
     const bodyGeo = new THREE.CylinderGeometry(bodyRadius, bodyRadius, bodyHeight, 64);
-    const matSide = new THREE.MeshStandardMaterial({
+    const matSide = new THREE.MeshPhysicalMaterial({
         color: 0xdddddd, // Aluminum base color
         roughness: 0.3,
         metalness: 0.8, // Aluminum
@@ -162,7 +164,16 @@ fileInput.addEventListener('change', (e) => {
     }
 });
 // Expose switch function to window for HTML buttons
+// Expose switch function and save function
 window.switchModel = showModel;
+window.saveImage = function () {
+    renderer.render(scene, camera);
+    const dataURL = renderer.domElement.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = 'mockup-3d.png';
+    link.href = dataURL;
+    link.click();
+};
 // Init Default
 showModel('mug');
 // Animation Loop
