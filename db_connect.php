@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost'; // Ajusta esto si tu host es diferente en Hostinger (a veces es una IP o 'localhost')
 $dbname = 'u409109107_sublimacion';
-$username = 'nestor5710sub'; // Cambiar por tu usuario real de Hostinger
+$username = 'u409109107_nestor5710sub'; // Cambiar por tu usuario real de Hostinger
 $password = 'Siena_Fracc@119.5710'; // Cambiar por tu contraseña real de Hostinger
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
